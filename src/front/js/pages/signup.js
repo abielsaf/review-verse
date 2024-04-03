@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import "../../styles/signup.css";
-
+import Swal from 'sweetalert2'
 
 export const Signup = () => {
     const { store, actions } = useContext(Context);
@@ -22,7 +22,10 @@ export const Signup = () => {
                 navigate("/login");
             }
         } else {
-            alert("Las contraseñas no coinciden.");
+            Swal.fire({
+                title: "Las contraseñas no coinciden.",
+                icon: "warning"
+            });
         }
     };
 

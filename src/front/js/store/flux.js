@@ -1,4 +1,6 @@
 const backUrl = process.env.BACKEND_URL  // Hay que modificar esta URL con la 3001 (La de nuestro back) y modifica el resto.
+import Swal from 'sweetalert2'
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
@@ -43,7 +45,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return true;
 					} else if (res.status === 401) {
 						const errorData = await res.json();
-						alert(errorData.msg);
+						Swal.fire({
+							title: (errorData.msg),
+							icon: "warning"
+						});
 						return false;
 					}
 				} catch (error) {
@@ -71,7 +76,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 
 					if (res.status === 200) {
-						alert("Se ha registrado correctamente");
+						Swal.fire({
+							title: "Se ha registrado correctamente!",
+							icon: "success"
+						});
 						return true;
 					} else if (res.status === 401) {
 						const errorData = await res.json();
@@ -124,7 +132,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}),
 					});
 					if (resp.ok) {
-						alert("Contraseña modificada correctamente");
+						Swal.fire({
+							title: "Contraseña modificada correctamente.",
+							icon: "success"
+						});
 						return true;
 					} else {
 						throw new Error('Failed to change password');

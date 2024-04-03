@@ -5,7 +5,7 @@ import { Context } from "../store/appContext";
 import { ReviewForm } from "../component/reviewForm";
 import { useNavigate } from "react-router-dom"
 import "../../styles/addReview.css";
-
+import Swal from 'sweetalert2'
 
 export const AddReview = () => {
   const { store, actions } = useContext(Context);
@@ -42,15 +42,19 @@ export const AddReview = () => {
         }
       })
       .then(data => {
-        console.log('Review added successfully:', data);
-        alert("¡Review añadida correctamente!");
+        Swal.fire({
+          title: "¡Review añadida correctamente!",
+          icon: "success"
+        });
         setTimeout(() => {
           navigate("/profile");
         }, 0);
       })
       .catch(error => {
-        console.error('Error adding review:', error);
-        alert("Vaya, ha ocurrido un error añadiendo tu review...");
+        Swal.fire({
+          title: "¡Vaya, ha ocurrido un error añadiendo tu review...",
+          icon: "warning"
+        });
       });
 
   };

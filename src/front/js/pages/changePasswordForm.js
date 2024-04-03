@@ -4,7 +4,7 @@ import "../../styles/changepassword.css";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from "react-router-dom"
-
+import Swal from 'sweetalert2'
 
 export const ChangePasswordForm = () => {
   const { store, actions } = useContext(Context);
@@ -19,7 +19,10 @@ export const ChangePasswordForm = () => {
 
     if (newPassword !== confirmNewPassword) {
       setPasswordsMatch(false);
-      alert('La contraseña nueva y confirmar contraseña nueva no coinciden.');
+      Swal.fire({
+        title: "La contraseña nueva y confirmar contraseña nueva no coinciden.",
+        icon: "error"
+      });
       return;
     }
 
@@ -41,12 +44,18 @@ export const ChangePasswordForm = () => {
       }
 
       const data = await response.json();
-      console.log(data.message);
-      alert("La visibilidad de tu perfil ha sido modificada correctamente.");
+      Swal.fire({
+        title: "¡Cambio realizado!",
+        text: "La visibilidad de tu perfil ha sido modificada correctamente.",
+        icon: "success"
+      });
+      
 
     } catch (error) {
-      console.error(error);
-      alert("Uh oh, parece que ha ocurrido un error.");
+      Swal.fire({
+        title: "Uh oh, parece que ha ocurrido un error.",
+        icon: "error"
+      });
     }
   };
 

@@ -5,6 +5,7 @@ import { Context } from "../store/appContext";
 import { Card, Button } from 'react-bootstrap';
 import { Search } from "../component/search";
 import "../../styles/profile.css";
+import Swal from 'sweetalert2'
 
 export const Profile = () => {
 	const { store, actions } = useContext(Context);
@@ -62,35 +63,50 @@ export const Profile = () => {
 		}
 	}, [store.token])
 
-
 	const deleteReview = async (reviewId) => {
 		try {
+		  const result = await Swal.fire({
+			title: '¿Estas seguro?',
+			text: 'No podrás recuperar esta review!',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Si, eliminar',
+			cancelButtonText: 'No, cancelar',
+			reverseButtons: true
+		  });
+	  
+		  if (result.isConfirmed) {
 			const response = await fetch(process.env.BACKEND_URL + `api/reviews/${reviewId}`, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + sessionStorage.getItem('token')
-				},
+			  method: 'DELETE',
+			  headers: {
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+			  },
 			});
-
+	  
 			if (!response.ok) {
-				throw new Error('Error deleting review');
+			  throw new Error('Error deleting review');
 			}
-
+	  
 			const data = await response.json();
-			alert('La review ha sido eliminada!');
-
-			// Find the index of the button in the deleteButtonsRef array
+			Swal.fire({
+			  title: "La review ha sido eliminada!",
+			  icon: "success"
+			});
+	  
 			const buttonIndex = deleteButtonsRef.current.findIndex(button => button.dataset.id === reviewId);
-
-			// Remove the corresponding review from the reviews array
+	  
 			if (buttonIndex !== -1) {
-				setReviews(reviews => reviews.filter(review => review.review_id !== parseInt(reviewId)));
+			  setReviews(reviews => reviews.filter(review => review.review_id !== parseInt(reviewId)));
 			}
+			deleteButtonsRef.current = deleteButtonsRef.current.filter(button => button.dataset.id !== reviewId);
+		  }
 		} catch (error) {
+
+		} finally {
+		  setShowDeleteConfirmation(true);
 		}
-		setShowDeleteConfirmation(true);
-	};
+	  };
 
 	useEffect(() => {
 		if (showDeleteConfirmation) {
@@ -139,4 +155,3 @@ export const Profile = () => {
 		</div>
 	);
 }
-

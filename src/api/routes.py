@@ -18,7 +18,7 @@ api = Blueprint('api', __name__)
 
 
 CORS(api, resources={r"/api/*": {"origins": os.getenv('ORIGINS_URL')}})
-
+print(os.getenv('ORIGINS_URL'))
 
 @api.route("/token", methods=["POST"])
 def create_token():

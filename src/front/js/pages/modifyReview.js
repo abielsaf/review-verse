@@ -3,6 +3,7 @@ import { Card, Form, Button } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom"
+import Swal from 'sweetalert2'
 
 export const ModifyReview = () => {
   const { store, actions } = useContext(Context);
@@ -28,12 +29,18 @@ export const ModifyReview = () => {
 
       const data = await response.json();
 
-      alert("¡Review modificada correctamente!");
+      Swal.fire({
+        title: "¡Review modificada correctamente!",
+        icon: "success"
+      });
       setTimeout(() => {
         navigate("/profile");
       }, 0);
     } catch (error) {
-      alert("Vaya, ha ocurrido un error modificando tu review...");
+      Swal.fire({
+        title: "Vaya, ha ocurrido un error modificando tu review....",
+        icon: "warning"
+      });
     }
   };
 
