@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 import os
-from flask import Flask, request, jsonify, url_for, send_from_directory
+from flask import Flask, request, jsonify, url_for, send_from_directory, abort
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
@@ -38,7 +38,10 @@ db.init_app(app)
 
 # add the admin
 setup_admin(app)
-
+if ENV == "production":
+        @app.route('/admin')
+        def block_admin():
+            abort(404)
 # add the admin
 setup_commands(app)
 
